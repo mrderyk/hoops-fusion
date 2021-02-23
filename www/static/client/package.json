@@ -1,0 +1,34 @@
+{
+  "name": "hoops-fusion-client",
+  "version": "0.0.1",
+  "description": "Hoops Fusion Client",
+  "main": "index.js",
+  "author": "Deryk DeGuzman",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@emotion/react": "^11.4.0",
+    "@emotion/styled": "^11.3.0",
+    "@reduxjs/toolkit": "^1.6.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
+    "react-spinners": "^0.11.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-typescript": "^7.14.6",
+    "@types/lodash": "^4.14.170",
+    "@types/react": "^17.0.11",
+    "@types/react-router-dom": "^5.1.7",
+    "ts-loader": "^9.2.3",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
+    "typescript": "^4.3.4",
+    "webpack": "^5.41.1",
+    "webpack-cli": "^4.7.2"
+  },
+  "scripts": {
+    "build": "webpack"
+  }
+}
