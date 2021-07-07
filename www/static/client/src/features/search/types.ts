@@ -7,11 +7,12 @@ export interface EntryProps {
   searchString: string;
   isSelected: boolean;
   type?: SearchType;
-  onSelect?: (e: any) => void;
+  onSelect?: (resultKey: string) => void;
 }
 
 export interface EntryWrapperProps {
   isSelected: boolean;
+  type: SearchType;
 }
 
 export interface FormattedLabelProps {
@@ -22,6 +23,11 @@ export interface FormattedLabelProps {
 
 export interface PhotoProps {
   imgURL: string;
+}
+
+export interface QueryFetchParams {
+  query: string;
+  searchID: string;
 }
 
 export interface ResultProps {
@@ -40,18 +46,25 @@ export interface ResultsProps extends SearchResultsState {
 export interface SearchInputProps extends React.HTMLProps<HTMLInputElement> {
   searchType: SearchType;
   searchID: string;
+  onSelectResult?: (e: any) => void;
 }
 
 export interface SearchProps {
   type: SearchType;
   id: string;
   onSelectResult?: (e: any) => void;
+  style?: any;
+  placeholder?: string;
 }
 
 export interface SearchResultsState { 
   players?: ResultProps[],
   teams?: ResultProps[],
   etc?: ResultProps
+}
+
+export interface SearchStates {
+  [key: string]: SearchState
 }
 
 export interface SearchState {

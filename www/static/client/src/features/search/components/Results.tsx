@@ -40,19 +40,23 @@ const Results: FC<ResultsProps> = (props: ResultsProps): ReactElement => {
   );
 
   let wrapperMaxWidth: string;
+  let wrapperWidth: string;
 
   switch(props.type) {
     case SearchType.MINI:
       wrapperMaxWidth = '400px';
+      wrapperWidth = '80%';
       break;
     case SearchType.MICRO:
-      wrapperMaxWidth = '200px';
+      wrapperMaxWidth = 'none';
+      wrapperWidth = '100%';
       break;
     default:
       wrapperMaxWidth = '600px';
+      wrapperWidth = '80%';
   }
   return (
-    <Wrapper style={{maxWidth: wrapperMaxWidth}}>
+    <Wrapper style={{maxWidth: wrapperMaxWidth, width: wrapperWidth}}>
       {playersResults}
     </Wrapper>
   )
@@ -70,14 +74,15 @@ const Entry: FC<EntryProps> = (props: EntryProps): ReactElement => {
 
 
   const defaultOnSelect = (e) => {
-    dispatch(searchActions.closeSearch());
     history.push(`/player/${playerKey}`);
   };
   const onSelect = props.onSelect || defaultOnSelect;
   const history = useHistory();
 
   return (
-    <EntryWrapper isSelected={props.isSelected} onClick={onSelect}>
+    <EntryWrapper type={props.type} isSelected={props.isSelected} onClick={(e) => { 
+      onSelect(playerKey) 
+      }}>
       {
         props.type !== SearchType.MICRO && (
           <PhotoWrapper>
@@ -111,14 +116,13 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   position: absolute;
-  width: 80%;
 `;
 
 const EntryWrapper = styled.div`
   background-color: ${(props: EntryWrapperProps) => props.isSelected ? 'rgba(245,188,66, 0.8)' : 'rgb(255,255,255)'};
   box-sizing: border-box;
   display: flex;
-  font-size: 14px;
+  font-size: ${(props: EntryWrapperProps) => props.type === SearchType.MICRO ? '10' : '14'}px;
   height: 40px;
   padding: 4px;
   width: 100%; 

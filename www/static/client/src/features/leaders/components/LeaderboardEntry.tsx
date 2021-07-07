@@ -31,6 +31,8 @@ const LEADER_PLACE_COLORS: string[] = [
   '#73CDFC',
 ];
 
+const DEFAULT_BG_COLOR = '#DDDDDD';
+
 const LeaderboardEntry: FC<LeaderboardEntryProps> = (props: LeaderboardEntryProps): ReactElement => {
   const history = useHistory();
 
@@ -38,7 +40,7 @@ const LeaderboardEntry: FC<LeaderboardEntryProps> = (props: LeaderboardEntryProp
     <Wrapper onClick={(e) => {
       history.push(`/player/${props.playerKey}`);
     }}>
-      <LeadPercentageMeter percentage={props.leadPercentage} color={LEADER_PLACE_COLORS[props.place]}/>
+      <LeadPercentageMeter percentage={props.leadPercentage} color={LEADER_PLACE_COLORS[props.place] || DEFAULT_BG_COLOR}/>
       <PhotoWrapper>
         <Photo imgURL={props.imgURL}/>
       </PhotoWrapper>

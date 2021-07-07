@@ -11,14 +11,12 @@ import { SearchProps } from '../types';
 
 const Search: React.FC<SearchProps> = (props: SearchProps) => {
   const { id, type } = props;
-	const state = useSelector((state: RootState) => state.search)
+	const state = useSelector((state: RootState) => state.search)[id];
   const ref = useRef(null);
-  const isInstanceSearching = state.activeSearchId === id;
-
-  useOutsideClickHandler(ref, () => isInstanceSearching);
   
+  useOutsideClickHandler(ref, id);
 
-  const results = (isInstanceSearching && state.searchResults) ? (
+  const results = state?.searchResults ? (
     <Results
       type={type}
       selectedResultIndex={state.selectedResultIndex}
@@ -29,10 +27,12 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
   ) : undefined;
 
   return (
-    <SearchWrapper ref={ref}>
-      <Input 
+    <SearchWrapper style={props.style} ref={ref}>
+      <Input
+        placeholder={props.placeholder}
         searchID={id}
         searchType={props.type}
+        onSelectResult={props.onSelectResult}
       />
       {results}
     </SearchWrapper>

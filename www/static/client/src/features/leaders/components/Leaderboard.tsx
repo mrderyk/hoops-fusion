@@ -6,6 +6,8 @@ import { LeagueLeader } from '../types';
 import LeaderboardEntry from './LeaderboardEntry';
 import Search from '../../search/components/Search';
 import { SearchType } from 'src/features/search/types';
+import { useAppDispatch } from '../../../common/hooks';
+import { fetchLeaderboardAddition } from '../actions'
 
 interface LeaderboardProps {
   category: string;
@@ -13,6 +15,7 @@ interface LeaderboardProps {
 }
 
 const Leaderboard: FC<LeaderboardProps> = (props: LeaderboardProps): ReactElement => {
+  const dispatch = useAppDispatch();
   const leaders = props.leaders.map((l: LeagueLeader, index: number) => {
     return (
       <LeaderboardEntry
@@ -29,12 +32,28 @@ const Leaderboard: FC<LeaderboardProps> = (props: LeaderboardProps): ReactElemen
   });
 
   return (
-    <Wrapper>
-      <HeaderWrapper>{props.category.toUpperCase()}</HeaderWrapper>
-      <Content>
-        {leaders}
-      </Content>
-    </Wrapper>
+    <div>
+      <Wrapper>
+        <HeaderWrapper>{props.category.toUpperCase()}</HeaderWrapper>
+        <Content>
+          {leaders}
+          <Search
+            id={uuid()}
+            type={SearchType.MICRO}
+            onSelectResult={(resultKey) => {
+              dispatch(
+                fetchLeaderboardAddition({
+                  playerKey: resultKey,
+                  category: props.category
+                })
+              );
+            }}
+            placeholder={'Compare a player...'}
+            style={{ border: '1px solid rgba(0,0,0,0.3)'}}
+          />
+        </Content>
+      </Wrapper>
+    </div>
   )
 }
 
@@ -42,6 +61,7 @@ const Wrapper = styled.div`
   box-shadow: 0 0 3px 2px rgba(0,0,0,.2);
   box-sizing: border-box;
   min-width: 280px;
+  padding-bottom: 10px;
 `;
 
 const HeaderWrapper = styled.div`

@@ -1,5 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SearchState } from './types';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { QueryFetchParams, SearchState, SearchStates } from './types';
+
+
 
 const fetchResultsFromAPI = async (query: string) => {
   const response = await fetch(`/search/${query}`);
@@ -9,78 +11,86 @@ const fetchResultsFromAPI = async (query: string) => {
 
 const fetchResults = createAsyncThunk(
   'search/fetchResults',
-  async (query: string) => {
+  async (params: QueryFetchParams) => {
+    const { query, searchID } = params;
     const response = await fetchResultsFromAPI(query);
     return response;
   }
 );
 
-const initialState: SearchState = {
-  query: '',
-  isFetching: false,
-  selectedResultIndex: -1,
-  activeSearchId: undefined,
-};
-
-const resetSearchState = (state: SearchState) => {
-  state.searchResults = undefined;
-  state.query = '';
-  state.isFetching = false;
-  state.activeSearchId = undefined;
-}
+const initialState: SearchStates = {};
 
 export const searchSlice = createSlice({
   name: 'search',
   initialState: initialState,
   reducers: {
-    initiateSearch: (state: SearchState, action: PayloadAction<string>) => {
-      resetSearchState(state);
-      state.activeSearchId = action.payload;
-    },
-    updateQuery: (state: SearchState, action: PayloadAction<string>) => {
-      state.searchResults = undefined;
-      const query = action.payload;
-      state.query = query;
-    },
-    closeSearch: (state: SearchState) => {
-      resetSearchState(state);
-    },
-    navigateToNextResult: (state: SearchState) => {
-      if (!state.searchResults) return;
+    initiateSearch: (state: SearchStates, action) => {
+      const instanceState = {
+        query: '',
+        isFetching: false,
+        selectedResultIndex: -1,
+      };
 
-      const nextResultIndex = state.selectedResultIndex + 1;
+      state[action.payload] = instanceState
+    },
+    updateQuery: (state: SearchStates, action) => {
+      const { updatedQuery, searchID } = action.payload;
+      const instanceState = state[searchID];
+
+      instanceState.searchResults = undefined;
+      instanceState.query = updatedQuery;
+    },
+    closeSearch: (state: SearchStates, action) => {
+      const instanceState = state[action.payload];
+
+      if (instanceState) {
+        instanceState.query = '';
+        instanceState.isFetching = false;
+        instanceState.searchResults = undefined;
+      }
+      delete state[action.payload];
+    },
+    navigateToNextResult: (state: SearchStates, action) => {
+      const instanceState = state[action.payload];
+      if (!instanceState.searchResults) return;
+
+      const nextResultIndex = instanceState.selectedResultIndex + 1;
       let numTotalSearchResults = 0;
-      Object.keys(state.searchResults).forEach((k) => {
-        numTotalSearchResults += state.searchResults[k].length;
+      Object.keys(instanceState.searchResults).forEach((k) => {
+        numTotalSearchResults += instanceState.searchResults[k].length;
       });
       
-      state.selectedResultIndex = nextResultIndex === numTotalSearchResults ? -1 : nextResultIndex;
+      instanceState.selectedResultIndex = nextResultIndex === numTotalSearchResults ? -1 : nextResultIndex;
     },
-    navigateToPreviousResult: (state: SearchState) => {
-      if (!state.searchResults) return;
-      const prevResultIndex = state.selectedResultIndex - 1 ;
+    navigateToPreviousResult: (state: SearchStates, action) => {
+      const instanceState = state[action.payload];
+      
+      if (!instanceState.searchResults) return;
+      const prevResultIndex = instanceState.selectedResultIndex - 1 ;
       let numTotalSearchResults = 0;
-      Object.keys(state.searchResults).forEach((k) => {
-        numTotalSearchResults += state.searchResults[k].length;
+      Object.keys(instanceState.searchResults).forEach((k) => {
+        numTotalSearchResults += instanceState.searchResults[k].length;
       });
 
-      switch (state.selectedResultIndex) {
+      switch (instanceState.selectedResultIndex) {
         case -1:
-          state.selectedResultIndex = numTotalSearchResults - 1;
+          instanceState.selectedResultIndex = numTotalSearchResults - 1;
           break;
         case 0:
-          state.selectedResultIndex = -1;
+          instanceState.selectedResultIndex = -1;
           break;
         default:
-          state.selectedResultIndex = prevResultIndex;
+          instanceState.selectedResultIndex = prevResultIndex;
       }
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchResults.pending, (state, action) => {
-      state.isFetching = true;
+      const instanceState = state[action.meta.arg.searchID];
+      instanceState.isFetching = true;
     });
     builder.addCase(fetchResults.fulfilled, (state, action) => {
+      const instanceState = state[action.meta.arg.searchID];
       const players = action.payload.results.map((result) => {
         return {
           label: `${result.first_name} ${result.last_name}`,
@@ -88,13 +98,14 @@ export const searchSlice = createSlice({
           key: result.key,
         }
       });
-      state.isFetching = false;
-      state.searchResults = {
+      instanceState.isFetching = false;
+      instanceState.searchResults = {
         players
       }
     });
     builder.addCase(fetchResults.rejected, (state, action) => {
-      state.isFetching = false;
+      const instanceState = state[action.meta.arg.searchID];
+      instanceState.isFetching = false;
     });
   }
 });
