@@ -19,21 +19,31 @@ const initialState: SearchState = {
   query: '',
   isFetching: false,
   selectedResultIndex: -1,
+  activeSearchId: undefined,
 };
+
+const resetSearchState = (state: SearchState) => {
+  state.searchResults = undefined;
+  state.query = '';
+  state.isFetching = false;
+  state.activeSearchId = undefined;
+}
 
 export const searchSlice = createSlice({
   name: 'search',
   initialState: initialState,
   reducers: {
+    initiateSearch: (state: SearchState, action: PayloadAction<string>) => {
+      resetSearchState(state);
+      state.activeSearchId = action.payload;
+    },
     updateQuery: (state: SearchState, action: PayloadAction<string>) => {
       state.searchResults = undefined;
       const query = action.payload;
       state.query = query;
     },
     closeSearch: (state: SearchState) => {
-      state.query = '';
-      state.searchResults = undefined;
-      state.selectedResultIndex = -1;
+      resetSearchState(state);
     },
     navigateToNextResult: (state: SearchState) => {
       if (!state.searchResults) return;

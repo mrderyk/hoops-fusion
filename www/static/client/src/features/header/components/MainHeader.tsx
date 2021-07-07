@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { FC, ReactElement } from 'react';
+import { v4 as uuid } from 'uuid';
 import styled from '@emotion/styled';
 
 import Search from '../../search/components/Search';
+import { SearchType } from 'src/features/search/types';
 
 
 const MainHeader: FC= (): ReactElement => {
@@ -11,7 +13,9 @@ const MainHeader: FC= (): ReactElement => {
       <TitleWrapper>
         <TitleContent>HoopsFusion</TitleContent>
       </TitleWrapper>
-      <SearchWrapper><Search/></SearchWrapper>
+      <SearchWrapper>
+        <Search id={uuid()} type={SearchType.DEFAULT}/>
+      </SearchWrapper>
     </ContentWrapper>
   );
 }

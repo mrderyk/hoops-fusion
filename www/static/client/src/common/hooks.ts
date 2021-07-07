@@ -6,11 +6,11 @@ import { searchActions } from '../features/search/searchSlice';
 type AppDispatch = typeof store.dispatch
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 
-export const useOutsideClickHandler = (ref) => {
+export const useOutsideClickHandler = (ref, getIsInstanceSearching) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
       function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
+        if (ref.current && !ref.current.contains(event.target) && getIsInstanceSearching()) {
           dispatch(searchActions.closeSearch());
         }
       }

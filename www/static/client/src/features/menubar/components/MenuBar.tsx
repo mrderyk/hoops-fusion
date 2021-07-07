@@ -1,7 +1,9 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { useHistory } from 'react-router-dom';
-import MiniSearch from '../../search/components/MiniSearch';
+import { v4 as uuid } from 'uuid';
+import Search from '../../search/components/Search';
+import { SearchType } from 'src/features/search/types';
 
 interface MenuBarProps {
   showSearch: boolean;
@@ -19,7 +21,7 @@ const MenuBar: React.FC = () => {
       </TitleWrapper>
       <SearchWrapper>
         <div style={{textAlign: 'right'}}>
-          <MiniSearch />
+          <Search id={uuid()} type={SearchType.MINI}/>
         </div>
       </SearchWrapper>
     </MenuBarWrapper>

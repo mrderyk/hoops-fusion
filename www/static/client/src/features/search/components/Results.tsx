@@ -2,12 +2,21 @@ import * as React from 'react';
 import { FC, ReactElement } from 'react';
 import styled from '@emotion/styled';
 import { useHistory } from 'react-router-dom';
-import { ResultsProps, ResultProps } from '../types';
+import {
+  EntryProps,
+  EntryWrapperProps,
+  FormattedLabelProps,
+  PhotoProps,
+  ResultsProps,
+  ResultProps,
+  SearchType
+} from '../types';
 import { searchActions } from '../searchSlice';
 import { useAppDispatch } from 'src/common/hooks';
 
 const Results: FC<ResultsProps> = (props: ResultsProps): ReactElement => {
   const players = props.players;
+  const type = props.type || SearchType.DEFAULT;
   const playersResults = (
     <div>
       { 
@@ -20,6 +29,8 @@ const Results: FC<ResultsProps> = (props: ResultsProps): ReactElement => {
               label={player.label.toLowerCase()}
               searchString={props.searchString.toLowerCase()}
               playerKey={player.key}
+              type={props.type}
+              onSelect={props.onSelectResult}
             />
           )	
         }) 
@@ -27,19 +38,24 @@ const Results: FC<ResultsProps> = (props: ResultsProps): ReactElement => {
     </div>
 
   );
+
+  let wrapperMaxWidth: string;
+
+  switch(props.type) {
+    case SearchType.MINI:
+      wrapperMaxWidth = '400px';
+      break;
+    case SearchType.MICRO:
+      wrapperMaxWidth = '200px';
+      break;
+    default:
+      wrapperMaxWidth = '600px';
+  }
   return (
-    <Wrapper style={{maxWidth: props.isMicro ? '400px': '600px'}}>
+    <Wrapper style={{maxWidth: wrapperMaxWidth}}>
       {playersResults}
     </Wrapper>
   )
-}
-
-interface EntryProps {
-  imgURL: string;
-  playerKey: string;
-  label: string;
-  searchString: string;
-  isSelected: boolean;
 }
 
 const Entry: FC<EntryProps> = (props: EntryProps): ReactElement => {
@@ -51,27 +67,28 @@ const Entry: FC<EntryProps> = (props: EntryProps): ReactElement => {
     .split('')
     .splice(matchStartIndex + searchString.length, label.length)
     .join('');
+
+
+  const defaultOnSelect = (e) => {
+    dispatch(searchActions.closeSearch());
+    history.push(`/player/${playerKey}`);
+  };
+  const onSelect = props.onSelect || defaultOnSelect;
   const history = useHistory();
-  
-  //const bgColor = props.isSelected ? 'pink' : 'white';
+
   return (
-    <EntryWrapper isSelected={props.isSelected} onClick={(e) => {
-      dispatch(searchActions.closeSearch());
-      history.push(`/player/${playerKey}`);
-    }}>
-      <PhotoWrapper>
-        <Photo imgURL={imgURL}/>
-      </PhotoWrapper>
+    <EntryWrapper isSelected={props.isSelected} onClick={onSelect}>
+      {
+        props.type !== SearchType.MICRO && (
+          <PhotoWrapper>
+            <Photo imgURL={imgURL}/>
+          </PhotoWrapper>
+        )
+      }
       <FormattedLabel searchString={searchString} strBeforeMatch={strBeforeMatch} strAfterMatch={strAfterMatch}/>
     </EntryWrapper>
   )
 };
-
-interface FormattedLabelProps {
-  searchString: string;
-  strBeforeMatch: string;
-  strAfterMatch: string;
-}
 
 const FormattedLabel: FC<FormattedLabelProps> = (props: FormattedLabelProps): ReactElement => {
   const { searchString, strBeforeMatch, strAfterMatch } = props;
@@ -92,15 +109,10 @@ const Wrapper = styled.div`
   border-bottom-right-radius: 6px;
   box-shadow: 0 6px 4px 4px rgb(0 0 0 / 20%);
   box-sizing: border-box;
-  max-width: 600px;
   overflow: hidden;
   position: absolute;
   width: 80%;
 `;
-
-interface EntryWrapperProps {
-  isSelected: boolean;
-}
 
 const EntryWrapper = styled.div`
   background-color: ${(props: EntryWrapperProps) => props.isSelected ? 'rgba(245,188,66, 0.8)' : 'rgb(255,255,255)'};
@@ -129,10 +141,6 @@ const PhotoWrapper = styled.div`
   margin-right: 10px;
   width: 40px;
 `;
-
-interface PhotoProps {
-  imgURL: string;
-}
 
 const Photo = styled.div`
   background-color: rgba(255, 255, 255, 1.0);

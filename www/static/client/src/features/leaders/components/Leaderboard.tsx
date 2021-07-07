@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { FC, ReactElement } from 'react';
-import { useSelector } from 'react-redux'
+import { v4 as uuid } from 'uuid';
 import styled from '@emotion/styled';
 import { LeagueLeader } from '../types';
 import LeaderboardEntry from './LeaderboardEntry';
+import Search from '../../search/components/Search';
+import { SearchType } from 'src/features/search/types';
 
 interface LeaderboardProps {
   category: string;

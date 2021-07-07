@@ -7,10 +7,7 @@ import { useAppDispatch } from '../../../common/hooks';
 import { searchActions } from '../searchSlice';
 import { RootState } from '../../../common/types';
 import { useHistory } from 'react-router-dom';
-
-interface SearchInputProps {
-  isMicro: boolean;
-}
+import { SearchInputProps, SearchType } from '../types';
 
 let debouncedFetch: (query: string) => void;
 
@@ -22,14 +19,35 @@ const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
   debouncedFetch = debouncedFetch || debounce((query: string) => {
     dispatch(searchActions.fetchResults(query));
   }, 500);
+
+  const isInstanceSearching = state.activeSearchId === props.searchID;
   
+  let pulseLoaderSize: number;
+
+  switch(props.searchType) {
+    case SearchType.MINI:
+      pulseLoaderSize = 2;
+      break;
+    case SearchType.MICRO:
+      pulseLoaderSize = 2;
+      break;
+    default:
+      pulseLoaderSize = 6;
+  }
 
   return (
-    <InputWrapper isMicro={props.isMicro}>
+    <InputWrapper 
+      searchType={props.searchType}
+      searchID={props.searchID}
+    >
       <StyledInput
-        isMicro={props.isMicro}
-        value={state.query}
+        searchType={props.searchType}
+        searchID={props.searchID}
+        value={isInstanceSearching ? state.query : ''}
         placeholder={'Search for a player'}
+        onClick={(e) => {
+          dispatch(searchActions.initiateSearch(props.searchID));
+        }}
         onChange={(e) => {
           const updatedQuery = e.currentTarget.value;
           dispatch(searchActions.updateQuery(updatedQuery));
@@ -58,8 +76,8 @@ const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
       />
       {
         (
-          state.isFetching && <SpinnerWrapper isMicro={props.isMicro}>
-            <PulseLoader size={props.isMicro ? 2 : 6} color={'#555555'}/>
+          (isInstanceSearching && state.isFetching) && <SpinnerWrapper searchType={props.searchType} searchID={props.searchID}>
+            <PulseLoader size={pulseLoaderSize} color={'#555555'}/>
           </SpinnerWrapper>
         )
       }
@@ -68,7 +86,16 @@ const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
 }
 
 const InputWrapper = styled.div`
-  max-width: ${(props: SearchInputProps) => props.isMicro ? '400': '600' }px;
+  max-width: ${(props: SearchInputProps) => {
+    switch(props.searchType) {
+      case SearchType.MINI:
+        return '400';
+      case SearchType.MICRO:
+        return '200';
+      case SearchType.DEFAULT:
+        return '600';
+    }
+  }}px;
   position: relative;
   width: 100%;
 `;
@@ -76,7 +103,16 @@ const InputWrapper = styled.div`
 const StyledInput = styled.input`
   border: none;
   font-family: 'Montserrat', sans-serif;
-  font-size: ${(props: SearchInputProps) => props.isMicro ? '16': '30' }px;
+  font-size: ${(props: SearchInputProps) => {
+    switch(props.searchType) {
+      case SearchType.MINI:
+        return '16';
+      case SearchType.MICRO:
+        return '12';
+      case SearchType.DEFAULT:
+        return '30';
+    }
+  }}px;
   padding-left: 4px;
   padding-right: 48px;
   width: 100%;
@@ -85,7 +121,16 @@ const StyledInput = styled.input`
 const SpinnerWrapper = styled.div`
   position: absolute;
   right: 8px;
-  top: ${(props: SearchInputProps) => props.isMicro ? '8': '14' }px;;
+  top: ${(props: SearchInputProps) => {
+    switch(props.searchType) {
+      case SearchType.MINI:
+        return '8';
+      case SearchType.MICRO:
+        return '8';
+      case SearchType.DEFAULT:
+        return '14';
+    }
+  }}px;
 `;
 
 export default SearchInput
