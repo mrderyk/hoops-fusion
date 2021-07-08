@@ -1,10 +1,10 @@
 import requests
 from concurrent.futures import ThreadPoolExecutor,  as_completed
-
+from www.config import SEARCH_SERVICE_URL
 from . models import PlayerSearchResults
 
 
-PLAYER_SEARCH_API_URL = 'http://0.0.0.0:9001/search/player'
+PLAYER_SEARCH_API_URL = '{url}/player'.format(url=SEARCH_SERVICE_URL)
 
 
 def get_player_search_results(search_term=''):

@@ -5,6 +5,6 @@ import os
 app = global_dependencies.app
 
 
-@app.route('/static/assets/<asset_filename>')
-def serve_asset(asset_filename):
-  return send_from_directory('%s/www/static/client/build' % os.getcwd(), asset_filename)
+@app.route('/static/assets/bundle.js')
+def serve_asset():
+  return send_from_directory('%s/www/static/client/build' % os.getcwd(), 'bundle.js')

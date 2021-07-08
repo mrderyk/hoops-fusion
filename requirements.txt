@@ -1,0 +1,19 @@
+aniso8601==9.0.1
+certifi==2021.5.30
+chardet==4.0.0
+click==8.0.1
+Flask==2.0.1
+Flask-RESTful==0.3.9
+Flask-Webpack==0.1.0
+gunicorn==20.1.0
+-e git+https://github.com/mrderyk/hfdb.git@bce4e15a7d864433bf7b203217bfc716c3259027#egg=hfdb
+idna==2.10
+itsdangerous==2.0.1
+Jinja2==3.0.1
+MarkupSafe==2.0.1
+peewee==3.14.4
+pytz==2021.1
+requests==2.25.1
+six==1.16.0
+urllib3==1.26.6
+Werkzeug==2.0.1

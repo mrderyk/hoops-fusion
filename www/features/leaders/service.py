@@ -2,9 +2,10 @@ import requests
 from concurrent.futures import ThreadPoolExecutor,  as_completed
 
 from . models import AllLeaders
+from www.config import STATS_SERVICE_URL
 
 
-LEADERS_API_URL_ROOT = 'http://0.0.0.0:5000/leaders'
+LEADERS_API_URL_ROOT = '{url}/leaders'.format(url=STATS_SERVICE_URL)
 REGULAR_SEASON_API_PATH = 'regular'
 COMPARE_PATH = 'compare'
 

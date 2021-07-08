@@ -1,7 +1,7 @@
 import requests
+from www.config import STATS_SERVICE_URL
 
-
-STATS_API_URL_ROOT = 'http://0.0.0.0:5000/stats'
+STATS_API_URL_ROOT = '{url}/stats'.format(url=STATS_SERVICE_URL)
 REGULAR_SEASON_API_PATH = 'regular'
 PLAYOFF_API_PATH = 'playoff'
 

@@ -1,2 +1,8 @@
+import os
+
 APP_NAME = 'Hoops Fusion'
 VERSION = '0.0.1'
+
+STATS_SERVICE_URL = os.environ.get('STATS_SERVICE_URL')
+PERSONNEL_SERVICE_URL = os.environ.get('PERSONNEL_SERVICE_URL')
+SEARCH_SERVICE_URL = os.environ.get('SEARCH_SERVICE_URL')
