@@ -90,6 +90,7 @@ const TableTitle = styled.div`
 `;
 
 const Table = styled.table`
+  background-color: rgb(255,255,255);
   border: 1px solid rgba(0,0,0,.2);
   font-size: 10px;
   width: 100%;

@@ -1,4 +1,6 @@
 body {
+  background-image: url(/static/assets/img/monogram.png);
+  background-size: 30px 30px;
   font-family: 'Montserrat', sans-serif;
   margin: 0;
 }

@@ -44,10 +44,10 @@ const LeaderboardEntry: FC<LeaderboardEntryProps> = (props: LeaderboardEntryProp
       <PhotoWrapper>
         <Photo imgURL={props.imgURL}/>
       </PhotoWrapper>
-      <Content>
+      <NamesWrapper>
         <TeamNameWrapper>{props.teamCode}</TeamNameWrapper>
         <NameWrapper>{props.fullName.toUpperCase()}</NameWrapper>
-      </Content>
+      </NamesWrapper>
       <StatWrapper>
         <div>{props.stat}</div>
       </StatWrapper>
@@ -70,7 +70,7 @@ const LeadPercentageMeter = styled.div`
   position: absolute;
   top: 0;
   width: ${(props: LeadPercentageMeterProps) => props.percentage }%;
-  z-index: -999;
+  z-index: 0;
 
   &:before {
     content: '';
@@ -102,6 +102,7 @@ const PhotoWrapper = styled.div`
   height: 40px;
   margin-right: 10px;
   width: 50px;
+  z-index: 1;
 `;
 
 const Photo = styled.div`
@@ -128,12 +129,13 @@ const TeamNameWrapper = styled.div`
   font-size: 10px;
   font-weight: 600;
   height: 15px;
-  line-height: 15px;
+  line-height: 20px;
 `;
 
-const Content = styled.div`
+const NamesWrapper = styled.div`
   flex-grow: 0;
   overflow: hidden;
+  z-index: 1;
 `;
 
 const StatWrapper = styled.div`
@@ -145,6 +147,7 @@ const StatWrapper = styled.div`
   line-height: 35px;
   padding: 5px 20px 0 20px;
   text-align: right;
+  z-index: 1;
 `;
 
 export default LeaderboardEntry;
