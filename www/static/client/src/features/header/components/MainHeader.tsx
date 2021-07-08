@@ -11,7 +11,7 @@ const MainHeader: FC= (): ReactElement => {
   return (
     <ContentWrapper>
       <TitleWrapper>
-        <TitleContent>HoopsFusion</TitleContent>
+        <TitleContent>HoopsFusion<sub>alpha</sub></TitleContent>
       </TitleWrapper>
       <SearchWrapper>
         <Search id={uuid()} type={SearchType.DEFAULT}/>
@@ -37,20 +37,27 @@ const TitleWrapper = styled.div`
   display: flex;
   flex-grow: 0;
   font-size: 80px;
-  padding-left: 0.3em;
-  padding-right: .7em;
+  padding: 0 1rem;
   position: relative;
 `;
 
 const TitleContent = styled.div`
-  height: 1.3em;
+  height: 100px;
+  position: relative;
+
+  sub {
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
 `;
 
 const SearchWrapper = styled.div`
   align-items: center;
   display: flex;
   flex: 1;
-  padding-left: .3em;
+  padding-left: 1rem;
 `;
 
 export default MainHeader;

@@ -45,7 +45,7 @@ const Results: FC<ResultsProps> = (props: ResultsProps): ReactElement => {
   switch(props.type) {
     case SearchType.MINI:
       wrapperMaxWidth = '400px';
-      wrapperWidth = '80%';
+      wrapperWidth = '100%';
       break;
     case SearchType.MICRO:
       wrapperMaxWidth = 'none';
@@ -53,8 +53,9 @@ const Results: FC<ResultsProps> = (props: ResultsProps): ReactElement => {
       break;
     default:
       wrapperMaxWidth = '600px';
-      wrapperWidth = '80%';
+      wrapperWidth = '100%';
   }
+  
   return (
     <Wrapper style={{maxWidth: wrapperMaxWidth, width: wrapperWidth}}>
       {playersResults}
