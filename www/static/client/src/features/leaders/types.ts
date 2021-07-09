@@ -15,4 +15,5 @@ export interface LeadersState {
   season: string;
   playoffLeaders: CategoryToLeaders[];
   regularSeasonLeaders: CategoryToLeaders[];
+  isFetching: boolean;
 }

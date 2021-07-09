@@ -30,19 +30,19 @@ export interface Stats {
 export interface PlayerPersonnel {
   firstName: string;
   lastName: string;
-  birthYear: number; 
-  birthDay: number;
-  birthMonth: number;
-  birthDayOfWeek: number;
-  birthCity: string;
-  birthCountry: string;
-  imgURL: string;
-  heightIN: number;
-  weightLBS: number;
-  jerseyNumber: number;
-  isRookie: boolean;
-  position: string;
-  teamCode: string;
+  birthYear?: number; 
+  birthDay?: number;
+  birthMonth?: number;
+  birthDayOfWeek?: number;
+  birthCity?: string;
+  birthCountry?: string;
+  imgURL?: string;
+  heightIN?: number;
+  weightLBS?: number;
+  jerseyNumber?: number;
+  isRookie?: boolean;
+  position?: string;
+  teamCode?: string;
 }
 
 export interface SortedStats {

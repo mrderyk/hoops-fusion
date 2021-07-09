@@ -8,6 +8,7 @@ import { fetchLatest } from '../actions';
 import Leaderboard from './Leaderboard';
 import ContentWrapper from 'src/common/components/ContentWrapper';
 import SubContentHeader from '../../header/components/SubContentHeader';
+import DataRetrievalSpinner from '../../../common/components/DataRetrievalSpinner';
 
 
 const Leaders: FC = (): ReactElement => {
@@ -18,13 +19,22 @@ const Leaders: FC = (): ReactElement => {
     dispatch(fetchLatest());
   }, [state.season]);
 
-  let regularSeasonLeaderboards;
-  let playoffLeaderboards;
+  let regularSeasonLeaderboardsContent;
 
-  if (state.regularSeasonLeaders) {
-    regularSeasonLeaderboards = state.regularSeasonLeaders.map((r) => {
-      return <Leaderboard key={`leaderboard:${Math.random()}`} category={r.category} leaders={r.leaders}/>
-    })
+  if (state.isFetching) {
+    regularSeasonLeaderboardsContent = (
+      <DataRetrievalSpinner loadingText={'RETRIEVING LEAGUE LEADERS'}/>
+    )
+  } else {
+    regularSeasonLeaderboardsContent = (
+      <Content>
+        {
+          state.regularSeasonLeaders.map((r) => {
+            return <Leaderboard key={`leaderboard:${Math.random()}`} category={r.category} leaders={r.leaders}/>
+          })
+        }
+      </Content>
+    );
   }
 
 
@@ -32,9 +42,7 @@ const Leaders: FC = (): ReactElement => {
     <Wrapper>
       <SubContentHeader>{state.season} SEASON LEADERS</SubContentHeader>
       <ContentWrapper>
-        <Content>
-          {regularSeasonLeaderboards}
-        </Content>
+        {regularSeasonLeaderboardsContent}
       </ContentWrapper>
     </Wrapper>
   )
@@ -48,5 +56,7 @@ const Content = styled.div`
   grid-row-gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 `;
+
+
 
 export default Leaders;

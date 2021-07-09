@@ -6,7 +6,8 @@ import categoryToDisplayText from './categoryToDisplayText';
 const initialState: LeadersState = {
   season: '2020-2021',
   playoffLeaders: [],
-  regularSeasonLeaders: []
+  regularSeasonLeaders: [],
+  isFetching: false,
 };
 
 export const leadersSlice = createSlice({
@@ -15,7 +16,9 @@ export const leadersSlice = createSlice({
   reducers: {
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchLatest.pending, (state, action) => {});
+    builder.addCase(fetchLatest.pending, (state, action) => {
+      state.isFetching = true;
+    });
 
     builder.addCase(fetchLatest.fulfilled, (state, action) => {
       const leagueLeaders = action.payload.regular.map((r: any) => {
@@ -31,7 +34,12 @@ export const leadersSlice = createSlice({
           }),
         }
       })
+      state.isFetching = false;
       state.regularSeasonLeaders = leagueLeaders;
+    });
+
+    builder.addCase(fetchLatest.rejected, (state, action) => {
+      state.isFetching = false;
     });
 
     builder.addCase(fetchLeaderboardAddition.pending, (state, action) => {});

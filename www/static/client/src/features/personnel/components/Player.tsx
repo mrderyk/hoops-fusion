@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../common/types';
 import { useParams } from 'react-router';
-
 import PlayerDetailHeader from '../../header/components/PlayerDetailHeader';
 import Stats from '../components/Stats';
+import DataRetrievalSpinner from '../../../common/components/DataRetrievalSpinner';
 import { personnelActions } from '../personnelSlice';
 import { useAppDispatch } from '../../../common/hooks';
 import MenuBar from '../../menubar/components/MenuBar';
@@ -31,15 +31,27 @@ const Player = () => {
     dispatch(personnelActions.fetchPlayerStatsByKey(fetchParams));
   }, [key]);
 
+  const headerContent = (state.isFetchingBioData || !state.bioData) ? <PlaceHolderHeader /> : <PlayerDetailHeader {...state.bioData}/>;
+  const statsContent = (state.isFetchingStats || !state.statsData) ?
+    <DataRetrievalSpinner loadingText='RETRIEVING PLAYER STATS'/> :
+    <Stats regular={state.statsData.regular} playoff={state.statsData.playoff} />
   return (
     <div>
       <MenuBar/>
-      {
-        state.bioData && <PlayerDetailHeader {...state.bioData}/>
-      }
-      <Stats regular={state.statsData.regular} playoff={state.statsData.playoff} />
+      { headerContent }
+      { statsContent }
     </div>
    );
+}
+
+const PlaceHolderHeader = () => {
+  return (
+    <PlayerDetailHeader 
+      firstName={''}
+      lastName={''}
+      imgURL={''}
+    />
+  )
 }
 
 export default Player;

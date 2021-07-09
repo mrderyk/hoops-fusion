@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import { debounce } from 'lodash';
-import PulseLoader from "react-spinners/PulseLoader";
+import PulseLoader from 'react-spinners/PulseLoader';
 import { useAppDispatch } from '../../../common/hooks';
 import { searchActions } from '../searchSlice';
 import { RootState } from '../../../common/types';
