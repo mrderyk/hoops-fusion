@@ -1,3 +1,13 @@
+export interface LeaderboardEntryProps extends LeagueLeader {
+  place: number;
+  leadPercentage: number;
+}
+
+export interface LeadPercentageMeterProps {
+  color: string;
+  percentage: number;
+}
+
 export interface LeagueLeader {
   fullName: string;
   imgURL: string;
@@ -16,4 +26,8 @@ export interface LeadersState {
   playoffLeaders: CategoryToLeaders[];
   regularSeasonLeaders: CategoryToLeaders[];
   isFetching: boolean;
+}
+
+export interface PhotoWrapperProps {
+  imgURL: string;
 }

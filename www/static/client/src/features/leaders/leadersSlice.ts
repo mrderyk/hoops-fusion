@@ -29,7 +29,8 @@ export const leadersSlice = createSlice({
               fullName: l.player_info.full_name,
               imgURL: l.player_info.img_url,
               teamCode: l.player_info.team,
-              stat: l.stat,
+              playerKey: l.player_info.key,
+              stat: l.stat
             }
           }),
         }

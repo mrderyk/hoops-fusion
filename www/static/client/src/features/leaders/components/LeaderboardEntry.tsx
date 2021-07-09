@@ -1,22 +1,8 @@
 import * as React from 'react';
 import { FC, ReactElement } from 'react';
 import styled from '@emotion/styled';
-import { LeagueLeader } from '../types';
+import { LeaderboardEntryProps, LeadPercentageMeterProps, PhotoWrapperProps } from '../types';
 import { useHistory } from 'react-router-dom';
-
-interface LeaderboardEntryProps extends LeagueLeader {
-  place: number;
-  leadPercentage: number;
-}
-
-interface LeadPercentageMeterProps {
-  color: string;
-  percentage: number;
-}
-
-interface PhotoWrapperProps {
-  imgURL: string;
-}
 
 const LEADER_PLACE_COLORS: string[] = [
   '#FD2607',
@@ -57,6 +43,7 @@ const LeaderboardEntry: FC<LeaderboardEntryProps> = (props: LeaderboardEntryProp
 
 const Wrapper = styled.div`
   box-sizing: border-box;
+  cursor: pointer;
   display: flex;
   margin-bottom: 4px;
   position: relative;

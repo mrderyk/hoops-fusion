@@ -4,11 +4,13 @@ class Leader():
     self._last_name = leader_data['player']['last_name']
     self._team_code = leader_data['player']['team_name']
     self._img_url = leader_data['player']['img_url']
+    self._key = leader_data['player']['key']
     self._stat = leader_data['stat']
   
   def serialize(self):
     return {
       'player_info': {
+        'key': self._key,
         'full_name': '{first_name} {last_name}'.format(first_name=self._first_name, last_name=self._last_name),
         'img_url': self._img_url,
         'team': self._team_code
