@@ -59,7 +59,7 @@ const Leaderboard: FC<LeaderboardProps> = (props: LeaderboardProps): ReactElemen
 
 const Wrapper = styled.div`
   background-color: rgb(255,255,255);
-  box-shadow: 0 0 3px 2px rgba(0,0,0,.2);
+  border: 1px solid #cccccc;
   box-sizing: border-box;
   min-width: 280px;
   padding-bottom: 10px;
