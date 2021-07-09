@@ -11,7 +11,7 @@ export interface PerGameStatsTableProps {
 
 const PerGameStatsTable: React.FC<PerGameStatsTableProps> = (props: PerGameStatsTableProps) => {
   return (
-    <ContentWrapper>
+    <ContentWrapper style={{overflowX: 'auto'}}>
       <TableTitle>Per-Game Stats</TableTitle>
       <Table cellPadding={0} cellSpacing={0}>
         <thead>

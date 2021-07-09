@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 
 const FocusedContentHeader = styled.div`
-  background-color: rgba(59, 74, 97, 0.8);
+  background-color: #555;
   color: rgb(255,255,255);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Heebo', sans-serif;
   font-size: 12px;
   font-weight: 400;
   margin: 1rem 0;

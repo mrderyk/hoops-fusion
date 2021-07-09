@@ -10,7 +10,7 @@ export interface CumulativeStatsTableProps {
 
 const CumulativeStatsTable: React.FC<CumulativeStatsTableProps> = (props: CumulativeStatsTableProps) => {
   return (
-    <ContentWrapper>
+    <ContentWrapper style={{overflowX: 'auto'}}>
       <TableTitle>Cumulative Stats</TableTitle>
       <Table cellPadding={0} cellSpacing={0}>
         <thead>

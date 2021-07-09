@@ -94,7 +94,7 @@ const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
       />
       {
         (
-          state?.isFetching && <SpinnerWrapper searchType={props.searchType} searchID={props.searchID}>
+          state?.isFetching && <SpinnerWrapper>
             <PulseLoader size={pulseLoaderSize} color={'#555555'}/>
           </SpinnerWrapper>
         )
@@ -120,7 +120,7 @@ const InputWrapper = styled.div`
 
 const StyledInput = styled.input`
   border: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Heebo', sans-serif;
   font-size: ${(props: SearchInputProps) => {
     switch(props.searchType) {
       case SearchType.MINI:
@@ -131,24 +131,27 @@ const StyledInput = styled.input`
         return '30';
     }
   }}px;
+  font-weight: ${(props: SearchInputProps) => {
+    switch(props.searchType) {
+      case SearchType.MICRO:
+        return '400';
+      case SearchType.MINI:
+      case SearchType.DEFAULT:
+        return '200';
+    }
+  }};
   padding-left: 4px;
   padding-right: 48px;
   width: 100%;
 `;
 
 const SpinnerWrapper = styled.div`
+  align-items: center;
+  display: flex;
   position: absolute;
+  bottom: 0;
+  height: 100%;
   right: 8px;
-  top: ${(props: SearchInputProps) => {
-    switch(props.searchType) {
-      case SearchType.MINI:
-        return '8';
-      case SearchType.MICRO:
-        return '6';
-      case SearchType.DEFAULT:
-        return '14';
-    }
-  }}px;
 `;
 
 export default SearchInput

@@ -68,9 +68,9 @@ const Wrapper = styled.div`
 const HeaderWrapper = styled.div`
   background-color: rgba(0,0,0,0.1);
   border-bottom: 1px solid rgba(0,0,0,0.2);
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Heebo', sans-serif;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 400;
   padding: 0.4rem;
   margin-bottom: 6px;
 `;

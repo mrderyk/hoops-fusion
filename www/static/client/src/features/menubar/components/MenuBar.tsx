@@ -20,7 +20,7 @@ const MenuBar: React.FC = () => {
         HF
       </TitleWrapper>
       <SearchWrapper>
-        <div style={{textAlign: 'right'}}>
+        <div style={{textAlign: 'right', flex: 1}}>
           <Search id={uuid()} type={SearchType.MINI}/>
         </div>
       </SearchWrapper>
@@ -35,21 +35,21 @@ const TitleWrapper = styled.div`
   cursor: pointer;
   display: flex;
   flex-grow: 0;
-  font-family: 'Timmana', sans-serif;
+  font-family: 'Heebo', sans-serif;
   font-size: 14px;
   padding-right: .7em;
-  padding-top: 4px;
   position: relative;
 `;
 
 const SearchWrapper = styled.div`
+  align-items: center;
   box-sizing: border-box;
+  display: flex;
   flex: 1;
-  padding-top: 4px;
 `;
 
 const MenuBarWrapper = styled.div`
-  background-color: rgb(59, 74, 97);
+  background-color: #333;
   border-bottom: 1px solid rgba(175,175,175);
   box-sizing: border-box;
   display: flex;

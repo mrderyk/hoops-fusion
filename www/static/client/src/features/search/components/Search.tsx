@@ -41,7 +41,7 @@ const Search: React.FC<SearchProps> = (props: SearchProps) => {
 
 const SearchWrapper = styled.div`
   box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Heebo', sans-serif;
   font-size: 1em;
   position: relative;
   width: 100%;

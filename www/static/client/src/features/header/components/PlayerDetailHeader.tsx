@@ -10,18 +10,20 @@ const PlayerDetailHeader: FC<PlayerPersonnel> = (props: PlayerPersonnel): ReactE
         <Photo imgURL={props.imgURL} />
       </PhotoWrapper>
       <NameWrapper>
-        <FirstNameWrapper>{props.firstName.toUpperCase()}</FirstNameWrapper>
-        <LastNameWrapper>{props.lastName.toUpperCase()}</LastNameWrapper>
+        <div style={{overflow: 'hidden'}}>
+          <FirstNameWrapper>{props.firstName.toUpperCase()}</FirstNameWrapper>
+          <LastNameWrapper>{props.lastName.toUpperCase()}</LastNameWrapper>
+        </div>
       </NameWrapper>
     </ContentWrapper>
   );
 }
 
 const ContentWrapper = styled.div`
-  background-color: rgb(59, 74, 97);
+  background-color: #333;
   box-sizing: border-box;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: space-between;
   padding: .5em 0;
   width: 100%;
@@ -30,8 +32,7 @@ const ContentWrapper = styled.div`
 const PhotoWrapper = styled.div`
   color: rgb(255, 255, 255);
   flex-grow: 0;
-  padding-left: 0.3em;
-  padding-right: .7em;
+  padding-left: 1rem;
 `;
 
 interface PhotoWrapperProps {
@@ -45,33 +46,50 @@ const Photo = styled.div`
   background-position: center top;
   border-radius: 50%;
   height: 125px;
-  margin: 5px 10px;
+  margin: 5px 0;
   width: 125px;
 `;
 
 const NameWrapper = styled.div`
   align-items: center;
+  display: flex;
   color: rgb(255, 255, 255);
   flex-grow: 1;
-  padding-left: 0.3em;
-  padding-right: .7em;
+  overflow: hidden;
+  padding: 0 1rem;
 `;
 
 const FirstNameWrapper = styled.div`
   box-sizing: border-box;
-  font-size: 30px;
-  height: 45px;
-  line-height: 30px;
-  padding-left: 4px;
-  padding-top: 15px;
+  font-size: 20px;
+  height: 20px;
+  margin-left: 4px;
+  width: 100%;
+
+  @media only screen 
+    and (min-width: 375px) 
+    and (max-width: 667px) { 
+      font-size: 20px;
+      height: 14px;
+  }
 `;
 
 const LastNameWrapper = styled.div`
   box-sizing: border-box;
   font-size: 80px;
   font-weight: 600;
-  height: 90px;
-  line-height: 75px;
+  height: 85px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+
+  @media only screen 
+    and (min-width: 375px) 
+    and (max-width: 667px) { 
+      font-size: 52px;
+      height: 56px;
+  }
 `;
 
 const SearchWrapper = styled.div`
