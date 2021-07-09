@@ -55,7 +55,7 @@ const Results: FC<ResultsProps> = (props: ResultsProps): ReactElement => {
       wrapperMaxWidth = '600px';
       wrapperWidth = '100%';
   }
-  
+
   return (
     <Wrapper style={{maxWidth: wrapperMaxWidth, width: wrapperWidth}}>
       {playersResults}
@@ -85,7 +85,7 @@ const Entry: FC<EntryProps> = (props: EntryProps): ReactElement => {
       onSelect(playerKey) 
       }}>
       {
-        props.type !== SearchType.MICRO && (
+         (
           <PhotoWrapper>
             <Photo imgURL={imgURL}/>
           </PhotoWrapper>
