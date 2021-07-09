@@ -4,7 +4,7 @@ var TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 var configFilePath = path.resolve(__dirname, 'tsconfig.json');
 
 var config = {
-  mode: 'development',
+  mode: 'production',
   entry: [path.resolve(__dirname, './src/index.tsx')],
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -14,7 +14,6 @@ var config = {
     extensions: ['.ts', '.tsx', '.js'],
     plugins: [new TsconfigPathsPlugin({ configFile: configFilePath })],
   },
-  devtool: 'inline-source-map',
   module: {
     rules: [
       {
