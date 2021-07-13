@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { QueryFetchParams, SearchState, SearchStates } from './types';
 
-
-
 const fetchResultsFromAPI = async (query: string) => {
   const response = await fetch(`/search/${query}`);
   const body = await response.json();
