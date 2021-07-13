@@ -1,3 +1,4 @@
+import { act } from '@testing-library/react';
 import { AnyAction } from 'redux';
 import reducer, { searchActions } from '../searchSlice';
 
@@ -20,7 +21,6 @@ const searchResults = {
 const commonStateForSearchID = {
   query: 'mock-query',
   isFetching: false,
-  searchResults: searchResults,
   selectedResultIndex: -1,
 }
 
@@ -81,13 +81,15 @@ test('should be able to navigate to the next search result', () => {
   const stateBeforeNavigateStart = {
     'mock-search-id': {
       ...commonStateForSearchID,
+      searchResults: searchResults,
       selectedResultIndex: -1,
     }
   };
 
-  const stateBeforeNavigateToNext= {
+  const stateBeforeNavigateToNext = {
     'mock-search-id': {
       ...commonStateForSearchID,
+      searchResults: searchResults,
       selectedResultIndex: 0,
     }
   };
@@ -95,27 +97,28 @@ test('should be able to navigate to the next search result', () => {
   const stateBeforeNavigatePastLastResult = {
     'mock-search-id': {
       ...commonStateForSearchID,
+      searchResults: searchResults,
       selectedResultIndex: 2,
     }
   };
 
   expect(reducer(stateBeforeNavigateStart, searchActions.navigateToNextResult('mock-search-id'))).toMatchObject({
     'mock-search-id': {
-      ...commonStateForSearchID,
+      ...stateBeforeNavigateStart['mock-search-id'],
       selectedResultIndex: 0
     }
   });
 
   expect(reducer(stateBeforeNavigateToNext, searchActions.navigateToNextResult('mock-search-id'))).toMatchObject({
     'mock-search-id': {
-      ...commonStateForSearchID,
+      ...stateBeforeNavigateToNext['mock-search-id'],
       selectedResultIndex: 1
     }
   });
 
   expect(reducer(stateBeforeNavigatePastLastResult, searchActions.navigateToNextResult('mock-search-id'))).toMatchObject({
     'mock-search-id': {
-      ...commonStateForSearchID,
+      ...stateBeforeNavigatePastLastResult['mock-search-id'],
       selectedResultIndex: -1
     }
   });
@@ -125,6 +128,7 @@ test('should be able to navigate to the previous search result', () => {
   const stateBeforeNavigateStart = {
     'mock-search-id': {
       ...commonStateForSearchID,
+      searchResults: searchResults,
       selectedResultIndex: -1,
     }
   };
@@ -132,6 +136,7 @@ test('should be able to navigate to the previous search result', () => {
   const stateBeforeNavigateToPrevious = {
     'mock-search-id': {
       ...commonStateForSearchID,
+      searchResults: searchResults,
       selectedResultIndex: 2,
     }
   };
@@ -139,28 +144,96 @@ test('should be able to navigate to the previous search result', () => {
   const stateBeforeNavigateBeforeFirstResult = {
     'mock-search-id': {
       ...commonStateForSearchID,
+      searchResults: searchResults,
       selectedResultIndex: 0,
     }
   };
 
   expect(reducer(stateBeforeNavigateStart, searchActions.navigateToPreviousResult('mock-search-id'))).toMatchObject({
     'mock-search-id': {
-      ...commonStateForSearchID,
+      ...stateBeforeNavigateStart['mock-search-id'],
       selectedResultIndex: 2
     }
   });
 
   expect(reducer(stateBeforeNavigateToPrevious, searchActions.navigateToPreviousResult('mock-search-id'))).toMatchObject({
     'mock-search-id': {
-      ...commonStateForSearchID,
+      ...stateBeforeNavigateToPrevious['mock-search-id'],
       selectedResultIndex: 1
     }
   });
 
   expect(reducer(stateBeforeNavigateBeforeFirstResult, searchActions.navigateToPreviousResult('mock-search-id'))).toMatchObject({
     'mock-search-id': {
-      ...commonStateForSearchID,
+      ...stateBeforeNavigateBeforeFirstResult['mock-search-id'],
       selectedResultIndex: -1
+    }
+  });
+});
+
+test('should retrieve results from the server and add them into the state', () => {
+  const initialState = {
+    'mock-search-id': {
+      query: 'mock-query',
+      isFetching: false,
+      selectedResultIndex: -1,
+    }
+  };
+  const searchResults = {
+    results: [
+      {
+        first_name: 'mock-first-name',
+        img_url: 'mock-img-url',
+        key: 'mock-key',
+        last_name: 'mock-last-name',
+        team_code: 'mock-team-code'
+      }
+    ]
+  };
+  const actionMeta = {
+    arg: {
+      searchID: 'mock-search-id'
+    }
+  };
+  const pendingAction = {
+    type: searchActions.fetchResults.pending.type,
+    meta: actionMeta,
+  };
+  const fulfilledAction = {
+    type: searchActions.fetchResults.fulfilled.type,
+    meta: actionMeta,
+    payload: searchResults
+  };
+  const rejectedAction = {
+    type: searchActions.fetchResults.rejected.type,
+    meta: actionMeta,
+  };
+
+  expect(reducer(initialState, pendingAction)).toEqual({
+    'mock-search-id': {
+      ...commonStateForSearchID,
+      isFetching: true,
+    }
+  });
+
+  expect(reducer(initialState, fulfilledAction)).toEqual({
+    'mock-search-id': {
+      ...commonStateForSearchID,
+      searchResults: {
+        players: [{
+          label: `${searchResults.results[0].first_name} ${searchResults.results[0].last_name}`,
+          imgURL: searchResults.results[0].img_url,
+          key: searchResults.results[0].key,
+        }]
+      },
+      isFetching: false,
+    }
+  });
+
+  expect(reducer(initialState, rejectedAction)).toEqual({
+    'mock-search-id': {
+      ...commonStateForSearchID,
+      isFetching: false,
     }
   });
 });
