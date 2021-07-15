@@ -16,3 +16,7 @@ def serve_css_asset(filename):
 @app.route('/static/assets/img/<filename>')
 def serve_img_asset(filename):
   return send_from_directory('{base_dir}/www/static/img'.format(base_dir=os.getcwd()), filename)
+
+@app.route('/static/assets/images/<filename>')
+def serve_etc_asset(filename):
+  return send_from_directory('{base_dir}/www/static/client/build/images'.format(base_dir=os.getcwd()), filename)

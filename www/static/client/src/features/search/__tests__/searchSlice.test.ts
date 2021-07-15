@@ -1,4 +1,3 @@
-import { act } from '@testing-library/react';
 import { AnyAction } from 'redux';
 import reducer, { searchActions } from '../searchSlice';
 

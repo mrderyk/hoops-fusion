@@ -37,7 +37,7 @@ const Player = () => {
     <Stats regular={state.statsData.regular} playoff={state.statsData.playoff} />
   return (
     <div>
-      <MenuBar/>
+      <MenuBar showTitle={true} showSearch={true}/>
       { headerContent }
       { statsContent }
     </div>
