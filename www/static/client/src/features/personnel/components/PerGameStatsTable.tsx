@@ -54,7 +54,7 @@ const PerGameStatsTable: React.FC<PerGameStatsTableProps> = (props: PerGameStats
       stats.ptspg.toFixed(1),
     ];
   })
-  return <StatsTable title={'Cumulative Stats'} columnHeaders={HEADERS} cellValues={cellValues}/>;
+  return <StatsTable title={'Per Game Stats'} columnHeaders={HEADERS} cellValues={cellValues}/>;
 };
 
 export default PerGameStatsTable;
