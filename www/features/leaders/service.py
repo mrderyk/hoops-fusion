@@ -7,6 +7,7 @@ from www.config import STATS_SERVICE_URL
 
 LEADERS_API_URL_ROOT = '{url}/leaders'.format(url=STATS_SERVICE_URL)
 REGULAR_SEASON_API_PATH = 'regular'
+PLAYOFF_API_PATH = 'playoff'
 COMPARE_PATH = 'compare'
 
 
@@ -16,6 +17,10 @@ def get_leaders():
     '{url_root}/{api_path}'.format(
       url_root=LEADERS_API_URL_ROOT,
       api_path=REGULAR_SEASON_API_PATH
+    ),
+    '{url_root}/{api_path}'.format(
+      url_root=LEADERS_API_URL_ROOT,
+      api_path=PLAYOFF_API_PATH
     )
   ]
 
@@ -27,10 +32,11 @@ def get_leaders():
 
   return AllLeaders(results_json)
 
-def get_leader_addition(player_key, season, category):
+def get_leader_addition(player_key, season, category, type):
+  api_path = REGULAR_SEASON_API_PATH if type == 'regular' else PLAYOFF_API_PATH
   url = '{url_root}/{api_path}/{compare_path}/{player_key}?season={season}&category={category}'.format(
     url_root=LEADERS_API_URL_ROOT,
-    api_path=REGULAR_SEASON_API_PATH,
+    api_path=api_path,
     compare_path=COMPARE_PATH,
     player_key=player_key,
     season=season,

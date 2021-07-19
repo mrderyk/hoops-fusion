@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchLatest, fetchLeaderboardAddition } from './actions';
-import { LeadersState, CategoryToLeaders } from './types';
+import { LeadersState, Mode } from './types';
 import categoryToDisplayText from './categoryToDisplayText';
 
 const initialState: LeadersState = {
@@ -8,12 +8,16 @@ const initialState: LeadersState = {
   playoffLeaders: [],
   regularSeasonLeaders: [],
   isFetching: false,
+  mode: Mode.REGULAR
 };
 
 export const leadersSlice = createSlice({
   name: 'leaders',
   initialState: initialState,
   reducers: {
+    switchMode: (state: LeadersState) => {
+      state.mode = state.mode === Mode.REGULAR ? Mode.PLAYOFF : Mode.REGULAR;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchLatest.pending, (state, action) => {
@@ -21,7 +25,9 @@ export const leadersSlice = createSlice({
     });
 
     builder.addCase(fetchLatest.fulfilled, (state, action) => {
-      const leagueLeaders = action.payload.regular.map((r: any) => {
+      state.isFetching = false;
+
+      state.regularSeasonLeaders = action.payload.regular.map((r: any) => {
         return {
           category: categoryToDisplayText[r.category],
           leaders: r.leaders.map((l: any) => {
@@ -34,9 +40,22 @@ export const leadersSlice = createSlice({
             }
           }),
         }
-      })
-      state.isFetching = false;
-      state.regularSeasonLeaders = leagueLeaders;
+      });
+
+      state.playoffLeaders = action.payload.playoff.map((p: any) => {
+        return {
+          category: categoryToDisplayText[p.category],
+          leaders: p.leaders.map((l: any) => {
+            return {
+              fullName: l.player_info.full_name,
+              imgURL: l.player_info.img_url,
+              teamCode: l.player_info.team,
+              playerKey: l.player_info.key,
+              stat: l.stat
+            }
+          }),
+        }
+      });
     });
 
     builder.addCase(fetchLatest.rejected, (state, action) => {
@@ -46,8 +65,9 @@ export const leadersSlice = createSlice({
     builder.addCase(fetchLeaderboardAddition.pending, (state, action) => {});
 
     builder.addCase(fetchLeaderboardAddition.fulfilled, (state, action) => {
-      const leagueLeaders = state.regularSeasonLeaders;
-      const leadersForCategoryIndex = state.regularSeasonLeaders.findIndex((l) => l.category == categoryToDisplayText[action.payload.category]);
+      const leadersKey = action.meta.arg.type === Mode.REGULAR ? 'regularSeasonLeaders' : 'playoffLeaders';
+      const leagueLeaders = state[leadersKey];
+      const leadersForCategoryIndex = state[leadersKey].findIndex((l) => l.category == categoryToDisplayText[action.payload.category]);
       const player = action.payload.player.player;
       const leadersForCategory = leagueLeaders[leadersForCategoryIndex];
       const updatedLeadersForCategory = [
@@ -67,5 +87,6 @@ export const leadersSlice = createSlice({
   },
 });
 
+export const leadersActions = leadersSlice.actions;
 
 export default leadersSlice.reducer;

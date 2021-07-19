@@ -30,7 +30,8 @@ class LeadersAdditionHandler(Resource):
   def get(self, player_key):
     category = request.args.get('category')
     season = request.args.get('season')
-    additional_player = get_leader_addition(player_key, season, category)
+    type = request.args.get('type')
+    additional_player = get_leader_addition(player_key, season, category, type)
     response = LeadersAdditionResponse(200, additional_player)
     
     return response.to_json()
