@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FC, ReactElement } from 'react';
 import { v4 as uuid } from 'uuid';
 import styled from '@emotion/styled';
-import { LeagueLeader } from '../types';
+import { LeagueLeader, Mode } from '../types';
 import LeaderboardEntry from './LeaderboardEntry';
 import Search from '../../search/components/Search';
 import { SearchType } from 'src/features/search/types';
@@ -12,6 +12,7 @@ import { fetchLeaderboardAddition } from '../actions'
 interface LeaderboardProps {
   category: string;
   leaders: LeagueLeader[];
+  type: Mode
 }
 
 const Leaderboard: FC<LeaderboardProps> = (props: LeaderboardProps): ReactElement => {
@@ -43,6 +44,7 @@ const Leaderboard: FC<LeaderboardProps> = (props: LeaderboardProps): ReactElemen
             onSelectResult={(resultKey) => {
               dispatch(
                 fetchLeaderboardAddition({
+                  type: props.type,
                   playerKey: resultKey,
                   category: props.category
                 })

@@ -1,12 +1,14 @@
 import { AnyAction } from 'redux';
 import reducer from '../leadersSlice';
 import * as leadersActions from '../actions';
+import { Mode } from '../types';
 
 const initialState = {
   season: '2020-2021',
   playoffLeaders: [],
   regularSeasonLeaders: [],
   isFetching: false,
+  mode: Mode.REGULAR
 };
 
 test('should return the initial state', () => {
@@ -20,7 +22,18 @@ test('should be able to retrieve the latest regular season leaders', () => {
   const fulfilledAction = {
     type: leadersActions.fetchLatest.fulfilled.type,
     payload: {
-      playoff: [],
+      playoff: [{
+        category: 'min',
+        leaders:[{
+          player_info: {
+            full_name: 'mock-full-name-2',
+            img_url: 'mock-image-url-2',
+            key: 'mock-key-2',
+            team: 'mock-team-2'
+          },
+          stat: 123
+        }]
+      }],
       regular: [{
         category: 'min',
         leaders:[{
@@ -50,14 +63,23 @@ test('should be able to retrieve the latest regular season leaders', () => {
     regularSeasonLeaders: [{
       category: 'minutes',
       leaders: [{
-          fullName: 'mock-full-name',
-          imgURL: 'mock-image-url',
-          teamCode: 'mock-team',
-          stat: 123,
-          playerKey: 'mock-key',
-       }],
-      },
-    ]
+        fullName: 'mock-full-name',
+        imgURL: 'mock-image-url',
+        teamCode: 'mock-team',
+        stat: 123,
+        playerKey: 'mock-key',
+      }],
+    }],
+    playoffLeaders: [{
+      category: 'minutes',
+      leaders: [{
+        fullName: 'mock-full-name-2',
+        imgURL: 'mock-image-url-2',
+        teamCode: 'mock-team-2',
+        stat: 123,
+        playerKey: 'mock-key-2',
+      }],
+    }],
   });
 
   expect(reducer({...initialState, isFetching: true}, rejectedAction)).toEqual({
@@ -67,8 +89,22 @@ test('should be able to retrieve the latest regular season leaders', () => {
 });
 
 test('should be able to retrieve data for an comparison addition to the leaderboard', () => {
+  const actionMetaRegularSeason = {
+    meta: {
+      arg: {
+        type: Mode.REGULAR
+      }
+    }
+  };
+  const actionMetaPlayoff = {
+    meta: {
+      arg: {
+        type: Mode.PLAYOFF
+      }
+    }
+  };
   const pendingAction = {
-    type: leadersActions.fetchLeaderboardAddition.pending.type
+    type: leadersActions.fetchLeaderboardAddition.pending.type,
   };
   const fulfilledAction = {
     type: leadersActions.fetchLeaderboardAddition.fulfilled.type,
@@ -109,10 +145,20 @@ test('should be able to retrieve data for an comparison addition to the leaderbo
         stat: 4321,
         playerKey: 'mock-key',
       }]
-    }] 
+    }],
+    playoffLeaders: [{
+      category: 'minutes',
+      leaders: [{
+        fullName: 'mock-full-name',
+        imgURL: 'mock-image-url',
+        teamCode: 'mock-team',
+        stat: 4321,
+        playerKey: 'mock-key',
+      }]
+    }],
   }
 
-  expect(reducer(stateWithLeaders, fulfilledAction)).toEqual({
+  expect(reducer(stateWithLeaders, { ...fulfilledAction, ...actionMetaRegularSeason})).toEqual({
     ...initialState,
     regularSeasonLeaders: [{
       category: 'minutes',
@@ -129,7 +175,46 @@ test('should be able to retrieve data for an comparison addition to the leaderbo
         stat: 1234,
         teamCode: 'mock-team-2',
       }],
-      },
-    ]
+    }],
+    playoffLeaders: [{
+      category: 'minutes',
+      leaders: [{
+        fullName: 'mock-full-name',
+        imgURL: 'mock-image-url',
+        teamCode: 'mock-team',
+        stat: 4321,
+        playerKey: 'mock-key',
+      }]
+    }],
+  });
+
+  expect(reducer(stateWithLeaders, { ...fulfilledAction, ...actionMetaPlayoff})).toEqual({
+    ...initialState,
+    regularSeasonLeaders:[{
+      category: 'minutes',
+      leaders: [{
+        fullName: 'mock-full-name',
+        imgURL: 'mock-image-url',
+        teamCode: 'mock-team',
+        stat: 4321,
+        playerKey: 'mock-key',
+      }]
+    }],
+    playoffLeaders: [{
+      category: 'minutes',
+      leaders: [{
+        fullName: 'mock-full-name',
+        imgURL: 'mock-image-url',
+        teamCode: 'mock-team',
+        stat: 4321,
+        playerKey: 'mock-key',
+      }, {
+        fullName: 'mock-first-name mock-last-name',
+        imgURL: 'mock-image-url-2',
+        playerKey: 'mock-key-2',
+        stat: 1234,
+        teamCode: 'mock-team-2',
+      }],
+    }]
   });
 });
